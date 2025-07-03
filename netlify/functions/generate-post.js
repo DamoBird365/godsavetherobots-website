@@ -35,7 +35,10 @@ exports.handler = async (event, context) => {
     
     // Debug logging (remove in production)
     console.log('Auth header received:', authHeader ? 'Present' : 'Missing');
+    console.log('Auth header value:', authHeader);
     console.log('Admin token configured:', adminToken ? 'Present' : 'Missing');
+    console.log('Admin token value:', adminToken);
+    console.log('Expected auth header:', `Bearer ${adminToken}`);
     
     if (!adminToken) {
       return {
@@ -178,6 +181,16 @@ Return the response in this JSON format:
           success: true,
           message: 'Article saved successfully',
           article: newArticle
+        })
+      };
+    } else if (action === 'test') {
+      // Simple test to validate authentication
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          message: 'Authentication successful'
         })
       };
     }
