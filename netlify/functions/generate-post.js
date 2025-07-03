@@ -33,11 +33,31 @@ exports.handler = async (event, context) => {
     const authHeader = event.headers.authorization;
     const adminToken = process.env.ADMIN_TOKEN;
     
-    if (!authHeader || !adminToken || authHeader !== `Bearer ${adminToken}`) {
+    // Debug logging (remove in production)
+    console.log('Auth header received:', authHeader ? 'Present' : 'Missing');
+    console.log('Admin token configured:', adminToken ? 'Present' : 'Missing');
+    
+    if (!adminToken) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'ADMIN_TOKEN environment variable not configured in Netlify' })
+      };
+    }
+    
+    if (!authHeader) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Unauthorized' })
+        body: JSON.stringify({ error: 'Authorization header missing' })
+      };
+    }
+    
+    if (authHeader !== `Bearer ${adminToken}`) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Invalid admin token' })
       };
     }
 
@@ -46,8 +66,14 @@ exports.handler = async (event, context) => {
 
     // Initialize Gemini AI
     const apiKey = process.env.GEMINI_API_KEY;
+    console.log('Gemini API key configured:', apiKey ? 'Present' : 'Missing');
+    
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY not configured');
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'GEMINI_API_KEY environment variable not configured in Netlify' })
+      };
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
