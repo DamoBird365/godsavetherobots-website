@@ -3,155 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Generate Post | God Save the Robots</title>
+    <title>Admin - AI Post Generator | God Save the Robots</title>
+    
+    <!-- Match the main site's head structure -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    
     <style>
+        /* Admin-specific styles that extend the main design system */
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: var(--spacing-lg);
+            min-height: calc(100vh - 200px);
         }
-        .admin-form {
-            background: #f5f5f5;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        .btn {
-            background: #007cba;
+
+        .admin-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--ethereal-cyan) 100%);
             color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
+            padding: var(--spacing-xl) 0;
+            margin-bottom: var(--spacing-xl);
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
         }
-        .btn:hover {
-            background: #005a87;
+
+        .admin-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
         }
-        .btn-success {
-            background: #28a745;
+
+        .admin-hero .robot-icon {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
         }
-        .btn-success:hover {
-            background: #1e7e34;
+
+        .admin-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-        .preview-container {
+
+        .auth-card, .admin-card {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            margin-top: 20px;
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            margin-bottom: var(--spacing-lg);
         }
+
+        .auth-card {
+            max-width: 500px;
+            margin: var(--spacing-xxl) auto;
+        }
+
+        .auth-card h2 {
+            color: var(--monastery-black);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-test {
+            background: var(--ethereal-cyan);
+            color: white;
+        }
+
+        .btn-test:hover {
+            background: #0891b2;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #10B981, #059669);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4B5563;
+            transform: translateY(-2px);
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            margin-top: var(--spacing-lg);
+        }
+
+        .preview-header {
+            background: linear-gradient(45deg, var(--divine-gold), #F97316);
+            color: white;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .preview-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
         .preview-meta {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+            background: #F8FAFC;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
         }
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
         }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
         }
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
+
+        .meta-label {
+            font-weight: 600;
+            color: var(--soft-gray);
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-xs);
         }
-        .auth-form {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background: #f5f5f5;
+
+        .meta-value {
+            color: var(--monastery-black);
+            font-weight: 500;
+        }
+
+        .preview-content {
+            padding: var(--spacing-xl);
+            line-height: 1.7;
+        }
+
+        .preview-content h1, .preview-content h2, .preview-content h3 {
+            color: var(--monastery-black);
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .preview-content h1 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--divine-gold);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .preview-content pre {
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: var(--spacing-md);
             border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+        }
+
+        .preview-content code {
+            background: #F3F4F6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            color: var(--ethereal-cyan);
+        }
+
+        .preview-actions {
+            padding: var(--spacing-lg);
+            background: #F8FAFC;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .message {
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid;
+        }
+
+        .message.error {
+            background: #FEF2F2;
+            border-color: #DC2626;
+            color: #991B1B;
+        }
+
+        .message.success {
+            background: #ECFDF5;
+            border-color: #10B981;
+            color: #065F46;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-light);
+            border-top: 4px solid var(--ethereal-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--spacing-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.9rem;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .status-indicator.online {
+            background: #ECFDF5;
+            color: #065F46;
+        }
+
+        .status-indicator.online::before {
+            content: "●";
+            color: #10B981;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .admin-hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+
+            .preview-actions {
+                flex-direction: column;
+            }
+
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1><a href="/">God Save the Robots</a></h1>
-        <p>Admin Panel - Generate New Post</p>
+    <!-- Header matching the main site -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <a href="/" class="brand-link">
+                        <div class="logo">
+                            <div class="robot-icon">🤖</div>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="site-title">God Save the Robots</h1>
+                            <p class="tagline">Our robots, who art in servers</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/articles" class="nav-link">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="status-indicator online">Admin Panel</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </header>
 
-    <main class="admin-container">
-        <!-- Authentication Form -->
-        <div id="auth-section" class="auth-form">
-            <h2>Admin Authentication</h2>
-            <div class="form-group">
-                <label for="admin-token">Admin Token:</label>
-                <input type="password" id="admin-token" placeholder="Enter admin token">
+    <main class="main-content">
+        <div class="admin-container">
+            <!-- Hero Section -->
+            <div class="admin-hero">
+                <h1>
+                    <span class="robot-icon">🧠</span>
+                    AI Post Generator
+                </h1>
+                <p>Harness the divine power of artificial intelligence to create engaging content</p>
             </div>
-            <button class="btn" onclick="authenticate()">Login</button>
-        </div>
 
-        <!-- Main Admin Panel (hidden initially) -->
-        <div id="admin-panel" style="display: none;">
-            <h2>Generate New Blog Post</h2>
-            
-            <form class="admin-form" onsubmit="generatePost(event)">
-                <div class="form-group">
-                    <label for="content-input">Content Input:</label>
-                    <textarea id="content-input" placeholder="Paste article, link, or topic you want to write about..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="prompt">Writing Prompt:</label>
-                    <textarea id="prompt" placeholder="Additional instructions for the AI (e.g., 'Write a humorous take on this', 'Focus on practical implications', etc.)">Write an engaging blog post about this topic that fits the God Save the Robots style - informative but accessible, with occasional humor and focus on human perspectives on technology.</textarea>
-                </div>
-                
-                <button type="submit" class="btn" id="generate-btn">Generate Post</button>
-            </form>
-
-            <!-- Preview Section -->
-            <div id="preview-section" style="display: none;">
-                <h3>Generated Post Preview</h3>
-                <div class="preview-container">
-                    <div class="preview-meta">
-                        <h4 id="preview-title"></h4>
-                        <p><strong>Description:</strong> <span id="preview-description"></span></p>
-                        <p><strong>Tags:</strong> <span id="preview-tags"></span></p>
-                        <p><strong>Author:</strong> <span id="preview-author"></span></p>
+            <!-- Authentication Section -->
+            <div id="auth-section" class="auth-card">
+                <h2>🔐 Sacred Authentication</h2>
+                <form class="contact-form" onsubmit="authenticate(event)">
+                    <div class="form-group">
+                        <label for="admin-token">Admin Token:</label>
+                        <input type="password" id="admin-token" placeholder="Enter your divine access token..." required>
+                        <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
+                            Use the ADMIN_TOKEN you configured in Netlify environment variables
+                        </small>
                     </div>
-                    <div id="preview-content"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-test" onclick="testToken()">Test Token</button>
+                        <button type="submit" class="btn btn-primary">Authenticate</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Main Admin Panel -->
+            <div id="admin-panel" style="display: none;">
+                <!-- Generation Form -->
+                <div class="admin-card">
+                    <h2 style="margin-bottom: var(--spacing-lg); color: var(--monastery-black);">
+                        🎬 Generate Posts from YouTube Videos
+                    </h2>
                     
-                    <div style="margin-top: 30px;">
-                        <button class="btn btn-success" onclick="savePost()">Approve & Save Post</button>
-                        <button class="btn" onclick="hidePreview()">Cancel</button>
+                    <form class="contact-form" onsubmit="generatePost(event)">
+                        <div class="form-group">
+                            <label for="prompt">🎯 The Digital Prophet's Sacred Instructions:</label>
+                            <textarea id="prompt" rows="25" readonly style="background-color: #f8f9fa; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5;">Role and Goal:
+You are an AI assistant tasked with creating content for my new website, "godsavetherobots," which has the tagline, "Our robots, who art in servers."
+Your persona is "The Digital Prophet." Your writing style should be tech-optimistic, creative, and slightly quirky, using evocative metaphors to describe technology (e.g., "digital angels," "oracles in the machine," "scribes of sales").
+The goal is to write an article about the business value of the main technological subject discussed in the following YouTube video(s). The article should be geared towards a business audience interested in the practical applications of AI.
+
+Instructions:
+Identify the Core Technology: Carefully analyze the content of the provided YouTube video(s) to determine the primary technology being discussed. This may or may not be Microsoft Copilot Studio. It could be AI agents, large language models, automation platforms, conversational AI, or other related technologies. Your article should focus on this primary technology and its business applications.
+
+Business Value Focus: Emphasize the business value of the core technology. Consider aspects like:
+- Increased efficiency
+- Cost savings
+- Improved customer experience
+- New revenue streams
+- Competitive advantages
+- Automation of tasks
+- Data-driven insights
+- Enhanced decision-making
+
+"Digital Prophet" Persona: Write in the style of "The Digital Prophet," using tech-optimistic, creative, and slightly quirky language with evocative metaphors.
+
+Handle Single or Multiple URLs: The input will be one or more YouTube URLs. If multiple URLs are provided, synthesize the information from all videos to create a cohesive and comprehensive article. Avoid simply summarizing each video individually.
+
+Accuracy is paramount. The information you use must be accurately represented.
+
+Please return the response in this JSON format:
+{
+  "title": "Your Generated Title",
+  "description": "Meta description for SEO (max 160 characters)",
+  "content": "Full markdown content here",
+  "tags": "ai, automation, technology",
+  "author": "The Digital Prophet"
+}</textarea>
+                            <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
+                                📋 This is your pre-configured prompt that will be sent to the AI along with the YouTube URLs
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="content-input">� YouTube URLs:</label>
+                            <textarea id="content-input" placeholder="https://youtu.be/example1
+https://youtu.be/example2
+https://youtu.be/example3
+
+Paste one or more YouTube URLs here..." rows="8" required></textarea>
+                            <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
+                                📺 Paste YouTube URLs here. Multiple URLs can be separated by commas, semicolons, or placed on new lines
+                            </small>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="generate-btn">
+                                🎬 Generate Post from Videos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Preview Section -->
+                <div id="preview-section" style="display: none;">
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <h3>
+                                📖 Generated Post Preview
+                            </h3>
+                        </div>
+                        
+                        <div class="preview-meta">
+                            <div class="meta-grid">
+                                <div class="meta-item">
+                                    <span class="meta-label">Title</span>
+                                    <span class="meta-value" id="preview-title"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Author</span>
+                                    <span class="meta-value" id="preview-author"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Description</span>
+                                    <span class="meta-value" id="preview-description"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Tags</span>
+                                    <span class="meta-value" id="preview-tags"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-content" id="preview-content"></div>
+                        
+                        <div class="preview-actions">
+                            <button class="btn btn-success" onclick="savePost()">
+                                ✅ Approve & Publish
+                            </button>
+                            <button class="btn btn-secondary" onclick="hidePreview()">
+                                ❌ Reject & Try Again
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Messages Area -->
+                <div id="message-area"></div>
             </div>
 
-            <!-- Messages -->
-            <div id="message-area"></div>
+            <!-- Loading Overlay -->
+            <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>The AI gods are contemplating your request...</p>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -160,20 +500,93 @@
         let authToken = '';
         let generatedArticle = null;
 
-        function authenticate() {
-            authToken = document.getElementById('admin-token').value;
-            if (authToken) {
-                document.getElementById('auth-section').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-            }
-        }
-
         function showMessage(message, type = 'error') {
             const messageArea = document.getElementById('message-area');
-            messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+            messageArea.innerHTML = `<div class="message ${type}">${message}</div>`;
             setTimeout(() => {
                 messageArea.innerHTML = '';
             }, 5000);
+        }
+
+        function showLoading(show = true) {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = show ? 'flex' : 'none';
+        }
+
+        async function testToken() {
+            const token = document.getElementById('admin-token').value;
+            if (!token) {
+                showMessage('Please enter an admin token first');
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/generate-post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        action: 'test'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Token is valid! You can now authenticate.', 'success');
+                } else if (response.status === 401) {
+                    showMessage('Invalid admin token. Please check your token and try again.');
+                } else if (response.status === 500) {
+                    showMessage('Server configuration error: ' + data.error);
+                } else {
+                    showMessage('Authentication test failed: ' + data.error);
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message);
+            }
+        }
+
+        async function authenticate(event) {
+            event.preventDefault();
+            const token = document.getElementById('admin-token').value;
+            
+            if (!token) {
+                showMessage('Please enter an admin token');
+                return;
+            }
+            
+            // Test the token by making a simple request to the server
+            try {
+                const response = await fetch('/.netlify/functions/generate-post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        action: 'test'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = token;
+                    document.getElementById('auth-section').style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'block';
+                    showMessage('Authentication successful! Welcome to the divine realm.', 'success');
+                } else if (response.status === 401) {
+                    showMessage('Invalid admin token. Please check your token and try again.');
+                } else if (response.status === 500) {
+                    showMessage('Server configuration error: ' + data.error);
+                } else {
+                    showMessage('Authentication failed: ' + data.error);
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message);
+            }
         }
 
         async function generatePost(event) {
@@ -184,13 +597,13 @@
             const generateBtn = document.getElementById('generate-btn');
             
             if (!contentInput.trim()) {
-                showMessage('Please provide content input');
+                showMessage('Please provide source material');
                 return;
             }
 
-            generateBtn.textContent = 'Generating...';
+            generateBtn.textContent = 'Analyzing Videos & Channeling AI Wisdom...';
             generateBtn.disabled = true;
-            document.body.classList.add('loading');
+            showLoading(true);
 
             try {
                 const response = await fetch('/.netlify/functions/generate-post', {
@@ -214,15 +627,15 @@
 
                 generatedArticle = data.generatedContent;
                 showPreview(generatedArticle);
-                showMessage('Post generated successfully! Review it below.', 'success');
+                showMessage('Post generated successfully! The AI gods have spoken. Review the divine creation below.', 'success');
 
             } catch (error) {
                 console.error('Error:', error);
                 showMessage('Error generating post: ' + error.message);
             } finally {
-                generateBtn.textContent = 'Generate Post';
+                generateBtn.textContent = '🎬 Generate Post from Videos';
                 generateBtn.disabled = false;
-                document.body.classList.remove('loading');
+                showLoading(false);
             }
         }
 
@@ -251,6 +664,8 @@
                 return;
             }
 
+            showLoading(true);
+
             try {
                 const response = await fetch('/.netlify/functions/generate-post', {
                     method: 'POST',
@@ -270,16 +685,18 @@
                     throw new Error(data.error || 'Failed to save post');
                 }
 
-                showMessage('Post saved successfully! It will appear on the site shortly.', 'success');
+                showMessage('🎉 Post published successfully! The divine wisdom has been shared with the world. It will appear on the site shortly.', 'success');
                 hidePreview();
                 
                 // Clear form
                 document.getElementById('content-input').value = '';
-                document.getElementById('prompt').value = 'Write an engaging blog post about this topic that fits the God Save the Robots style - informative but accessible, with occasional humor and focus on human perspectives on technology.';
+                // Prompt is readonly, no need to reset it
 
             } catch (error) {
                 console.error('Error:', error);
                 showMessage('Error saving post: ' + error.message);
+            } finally {
+                showLoading(false);
             }
         }
     </script>
