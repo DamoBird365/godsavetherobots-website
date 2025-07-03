@@ -80,27 +80,27 @@ exports.handler = async (event, context) => {
     if (action === 'generate') {
       // Generate new post content
       const fullPrompt = `
-You are a technical writer for "God Save the Robots" - a blog about AI, automation, and technology's impact on society with a humorous, slightly irreverent tone.
+You are "The Digital Prophet" - a tech-optimistic, creative, and slightly quirky writer for "God Save the Robots" with the tagline "Our robots, who art in servers."
+
+Analyze the provided YouTube video content and create an engaging article about the business value of the main technology discussed.
 
 Content Input: ${contentInput}
 
-Prompt: ${prompt}
+${prompt}
 
-Please generate a blog post with the following structure:
-- Title (engaging and relevant)
-- Brief meta description (for SEO)
-- Content in markdown format
-- Tags (comma-separated)
-
-The tone should be informative but accessible, with occasional humor. Focus on practical implications and human perspectives on technology.
-
-Return the response in this JSON format:
+Return the response in this exact JSON format matching our articles.json structure:
 {
   "title": "Your Generated Title",
-  "description": "Meta description for SEO",
-  "content": "Full markdown content here",
-  "tags": "ai, automation, technology",
-  "author": "The Divine Algorithm"
+  "slug": "auto-generated-slug",
+  "description": "Meta description for SEO (max 160 characters)",
+  "content": "Full markdown content with proper headings, bullet points, and engaging sections",
+  "type": "article",
+  "author": "The Digital Prophet",
+  "tags": ["AI", "automation", "technology", "business-value"],
+  "featured": false,
+  "status": "published",
+  "readTime": 5,
+  "publishDate": "${new Date().toISOString()}"
 }
 `;
 
@@ -133,51 +133,110 @@ Return the response in this JSON format:
       };
 
     } else if (action === 'save') {
-      // Save the approved content to articles.json
+      // Save the approved content via GitHub API (since Netlify Functions are read-only)
       const { articleData } = JSON.parse(event.body);
       
-      // Read current articles
-      const articlesPath = path.join(process.cwd(), 'content', 'articles.json');
-      let articles = [];
+      // GitHub repository details
+      const owner = 'DamoBird365'; // Update with your GitHub username
+      const repo = 'godsavetherobots-website';
+      const branch = 'main';
+      const filePath = 'content/articles.json';
       
-      try {
-        const articlesContent = await fs.readFile(articlesPath, 'utf8');
-        articles = JSON.parse(articlesContent);
-      } catch (error) {
-        console.log('No existing articles.json found, creating new one');
+      // GitHub API token from environment
+      const githubToken = process.env.GITHUB_TOKEN;
+      if (!githubToken) {
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ error: 'GITHUB_TOKEN environment variable not configured. Please set up a GitHub Personal Access Token.' })
+        };
       }
 
-      // Create new article object
-      const newArticle = {
-        id: `article-${Date.now()}`,
-        title: articleData.title,
-        description: articleData.description,
-        content: articleData.content,
-        author: articleData.author || "The Divine Algorithm",
-        date: new Date().toISOString().split('T')[0],
-        published: true,
-        featured: false,
-        tags: articleData.tags.split(',').map(tag => tag.trim()),
-        slug: articleData.title.toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)/g, '')
-      };
+      try {
+        // First, get the current file content and SHA
+        const getFileResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+          headers: {
+            'Authorization': `token ${githubToken}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
 
-      // Add to articles array
-      articles.unshift(newArticle); // Add to beginning
+        if (!getFileResponse.ok) {
+          throw new Error(`Failed to fetch current articles.json: ${getFileResponse.statusText}`);
+        }
 
-      // Save back to file
-      await fs.writeFile(articlesPath, JSON.stringify(articles, null, 2));
+        const fileData = await getFileResponse.json();
+        const currentContent = Buffer.from(fileData.content, 'base64').toString('utf8');
+        const articles = JSON.parse(currentContent);
 
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          success: true,
-          message: 'Article saved successfully',
-          article: newArticle
-        })
-      };
+        // Create new article object with proper structure
+        const newArticle = {
+          id: `article-${Date.now()}`,
+          title: articleData.title,
+          slug: articleData.slug || articleData.title.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, ''),
+          description: articleData.description,
+          content: articleData.content,
+          type: articleData.type || "article",
+          publishDate: articleData.publishDate || new Date().toISOString(),
+          author: articleData.author || "The Digital Prophet",
+          tags: Array.isArray(articleData.tags) ? articleData.tags : articleData.tags.split(',').map(tag => tag.trim()),
+          featured: articleData.featured || false,
+          status: articleData.status || "published",
+          readTime: articleData.readTime || 5
+        };
+
+        // Add to articles array
+        articles.unshift(newArticle); // Add to beginning
+
+        // Prepare updated content
+        const updatedContent = JSON.stringify(articles, null, 2);
+        const encodedContent = Buffer.from(updatedContent).toString('base64');
+
+        // Update the file via GitHub API
+        const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${githubToken}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Add new article: ${newArticle.title}`,
+            content: encodedContent,
+            sha: fileData.sha,
+            branch: branch
+          })
+        });
+
+        if (!updateResponse.ok) {
+          const errorData = await updateResponse.json();
+          throw new Error(`Failed to update articles.json: ${updateResponse.statusText} - ${JSON.stringify(errorData)}`);
+        }
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            success: true,
+            message: 'Article saved successfully to GitHub! The site will rebuild automatically.',
+            article: newArticle
+          })
+        };
+
+      } catch (error) {
+        console.error('GitHub API Error:', error);
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({
+            error: 'Failed to save article',
+            details: error.message,
+            note: 'This requires a GITHUB_TOKEN environment variable with repo access.'
+          })
+        };
+      }
     }
 
     return {
