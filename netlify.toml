@@ -2,7 +2,7 @@
   functions = "netlify/functions"
 
 [functions]
-  external_node_modules = ["express", "express-handlebars", "markdown-it", "mongoose"]
+  external_node_modules = ["express", "express-handlebars", "markdown-it", "mongoose", "marked", "highlight.js"]
   node_bundler = "esbuild"
 
 [[redirects]]
