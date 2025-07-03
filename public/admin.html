@@ -82,15 +82,6 @@
             min-width: 120px;
         }
 
-        .btn-test {
-            background: var(--ethereal-cyan);
-            color: white;
-        }
-
-        .btn-test:hover {
-            background: #0891b2;
-            transform: translateY(-2px);
-        }
 
         .btn-success {
             background: linear-gradient(45deg, #10B981, #059669);
@@ -364,7 +355,6 @@
                         </small>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-test" onclick="testToken()">Test Token</button>
                         <button type="submit" class="btn btn-primary">Authenticate</button>
                     </div>
                 </form>
@@ -513,41 +503,6 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
             overlay.style.display = show ? 'flex' : 'none';
         }
 
-        async function testToken() {
-            const token = document.getElementById('admin-token').value;
-            if (!token) {
-                showMessage('Please enter an admin token first');
-                return;
-            }
-
-            try {
-                const response = await fetch('/.netlify/functions/generate-post', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        action: 'test'
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (response.ok) {
-                    showMessage('Token is valid! You can now authenticate.', 'success');
-                } else if (response.status === 401) {
-                    showMessage('Invalid admin token. Please check your token and try again.');
-                } else if (response.status === 500) {
-                    showMessage('Server configuration error: ' + data.error);
-                } else {
-                    showMessage('Authentication test failed: ' + data.error);
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message);
-            }
-        }
-
         async function authenticate(event) {
             event.preventDefault();
             const token = document.getElementById('admin-token').value;
@@ -557,36 +512,10 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
                 return;
             }
             
-            // Test the token by making a simple request to the server
-            try {
-                const response = await fetch('/.netlify/functions/generate-post', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        action: 'test'
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (response.ok) {
-                    authToken = token;
-                    document.getElementById('auth-section').style.display = 'none';
-                    document.getElementById('admin-panel').style.display = 'block';
-                    showMessage('Authentication successful! Welcome to the divine realm.', 'success');
-                } else if (response.status === 401) {
-                    showMessage('Invalid admin token. Please check your token and try again.');
-                } else if (response.status === 500) {
-                    showMessage('Server configuration error: ' + data.error);
-                } else {
-                    showMessage('Authentication failed: ' + data.error);
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message);
-            }
+            authToken = token;
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            showMessage('Authentication successful! Welcome to the divine realm.', 'success');
         }
 
         async function generatePost(event) {
