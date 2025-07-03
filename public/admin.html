@@ -157,8 +157,166 @@
         }
 
         .preview-content {
-            padding: var(--spacing-xl);
+            padding: 0;
             line-height: 1.7;
+        }
+
+        /* Article Preview Styles */
+        .article-preview {
+            max-width: none;
+        }
+
+        .article-preview-header {
+            padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .article-category {
+            background: linear-gradient(45deg, var(--ethereal-cyan), var(--divine-gold));
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .article-date, .article-reading-time {
+            color: var(--soft-gray);
+            font-size: 0.9rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--monastery-black);
+            line-height: 1.2;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .article-excerpt {
+            font-size: 1.2rem;
+            color: var(--soft-gray);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .article-tags {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--border-light);
+            color: var(--monastery-black);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .article-content {
+            padding: var(--spacing-xl);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4 {
+            color: var(--monastery-black);
+            font-weight: 700;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .article-content h1 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid var(--divine-gold);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            color: var(--ethereal-cyan);
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+        }
+
+        .article-content p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: var(--spacing-md) 0;
+            padding-left: var(--spacing-lg);
+        }
+
+        .article-content li {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--divine-gold);
+            padding-left: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            font-style: italic;
+            color: var(--soft-gray);
+        }
+
+        .article-content code {
+            background: #F3F4F6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            color: var(--ethereal-cyan);
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .article-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+            
+            .article-excerpt {
+                font-size: 1.1rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+                padding: var(--spacing-lg);
+            }
         }
 
         .preview-content h1, .preview-content h2, .preview-content h3 {
@@ -274,6 +432,179 @@
             color: #10B981;
         }
 
+        .prompt-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .prompt-toggles {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+        }
+
+        .btn-sm {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: 0.875rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.9rem;
+            color: var(--soft-gray);
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin: 0;
+        }
+
+        #prompt[readonly] {
+            background-color: #f8f9fa !important;
+            cursor: default;
+        }
+
+        #prompt:not([readonly]) {
+            background-color: white !important;
+            border-color: var(--ethereal-cyan) !important;
+        }
+
+        /* Article Preview Styles */
+        .article-preview {
+            max-width: none;
+            font-family: var(--font-primary);
+        }
+
+        .article-preview-header {
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            font-size: 0.9rem;
+            color: var(--soft-gray);
+        }
+
+        .article-category {
+            background: var(--ethereal-cyan);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--monastery-black);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .article-excerpt {
+            font-size: 1.2rem;
+            color: var(--soft-gray);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+        }
+
+        .tag {
+            background: #F3F4F6;
+            color: var(--monastery-black);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .article-content h1 {
+            font-size: 2rem;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--monastery-black);
+        }
+
+        .article-content h2 {
+            font-size: 1.6rem;
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--monastery-black);
+        }
+
+        .article-content h3 {
+            font-size: 1.3rem;
+            margin-top: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            color: var(--monastery-black);
+        }
+
+        .article-content p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-lg);
+        }
+
+        .article-content li {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--divine-gold);
+            padding-left: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            font-style: italic;
+            color: var(--soft-gray);
+        }
+
+        .article-content code {
+            background: #F3F4F6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            color: var(--ethereal-cyan);
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            margin: var(--spacing-md) 0;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             .admin-hero h1 {
@@ -370,8 +701,20 @@
                     
                     <form class="contact-form" onsubmit="generatePost(event)">
                         <div class="form-group">
-                            <label for="prompt">🎯 The Digital Prophet's Sacred Instructions:</label>
-                            <textarea id="prompt" rows="25" readonly style="background-color: #f8f9fa; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5;">Role and Goal:
+                            <div class="prompt-controls">
+                                <label for="prompt">🎯 The Digital Prophet's Sacred Instructions:</label>
+                                <div class="prompt-toggles">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="togglePromptVisibility()">
+                                        <span id="prompt-toggle-text">Hide Prompt</span>
+                                    </button>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="prompt-editable" onchange="togglePromptEditable()">
+                                        <span>Enable Editing</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="prompt-container" style="display: block;">
+                                <textarea id="prompt" rows="25" readonly style="background-color: #f8f9fa; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5;">Role and Goal:
 You are an AI assistant tasked with creating content for my new website, "godsavetherobots," which has the tagline, "Our robots, who art in servers."
 Your persona is "The Digital Prophet." Your writing style should be tech-optimistic, creative, and slightly quirky, using evocative metaphors to describe technology (e.g., "digital angels," "oracles in the machine," "scribes of sales").
 The goal is to write an article about the business value of the main technological subject discussed in the following YouTube video(s). The article should be geared towards a business audience interested in the practical applications of AI.
@@ -403,9 +746,10 @@ Please return the response in this JSON format:
   "tags": "ai, automation, technology",
   "author": "The Digital Prophet"
 }</textarea>
-                            <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
-                                📋 This is your pre-configured prompt that will be sent to the AI along with the YouTube URLs
-                            </small>
+                                <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
+                                    📋 This is your pre-configured prompt that will be sent to the AI along with the YouTube URLs
+                                </small>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -489,6 +833,31 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
     <script>
         let authToken = '';
         let generatedArticle = null;
+        let promptVisible = true;
+
+        function togglePromptVisibility() {
+            const container = document.getElementById('prompt-container');
+            const toggleText = document.getElementById('prompt-toggle-text');
+            
+            promptVisible = !promptVisible;
+            container.style.display = promptVisible ? 'block' : 'none';
+            toggleText.textContent = promptVisible ? 'Hide Prompt' : 'Show Prompt';
+        }
+
+        function togglePromptEditable() {
+            const prompt = document.getElementById('prompt');
+            const checkbox = document.getElementById('prompt-editable');
+            
+            if (checkbox.checked) {
+                prompt.removeAttribute('readonly');
+                prompt.style.backgroundColor = 'white';
+                prompt.style.borderColor = 'var(--ethereal-cyan)';
+            } else {
+                prompt.setAttribute('readonly', true);
+                prompt.style.backgroundColor = '#f8f9fa';
+                prompt.style.borderColor = '#e9ecef';
+            }
+        }
 
         function showMessage(message, type = 'error') {
             const messageArea = document.getElementById('message-area');
@@ -569,14 +938,41 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
         }
 
         function showPreview(article) {
+            // Update meta fields
             document.getElementById('preview-title').textContent = article.title;
             document.getElementById('preview-description').textContent = article.description;
-            document.getElementById('preview-tags').textContent = article.tags;
+            document.getElementById('preview-tags').textContent = Array.isArray(article.tags) ? article.tags.join(', ') : article.tags;
             document.getElementById('preview-author').textContent = article.author;
+            
+            // Create a properly formatted article preview
+            const previewContent = document.getElementById('preview-content');
             
             // Convert markdown to HTML
             const htmlContent = marked.parse(article.content);
-            document.getElementById('preview-content').innerHTML = htmlContent;
+            
+            // Create article-style layout
+            previewContent.innerHTML = `
+                <article class="article-preview">
+                    <header class="article-preview-header">
+                        <div class="article-meta">
+                            <span class="article-category">${article.type || 'article'}</span>
+                            <span class="article-date">${new Date().toLocaleDateString()}</span>
+                            <span class="article-reading-time">${article.readTime || 5} min read</span>
+                        </div>
+                        <h1 class="article-title">${article.title}</h1>
+                        <p class="article-excerpt">${article.description}</p>
+                        <div class="article-tags">
+                            ${Array.isArray(article.tags) ? 
+                                article.tags.map(tag => `<span class="tag">${tag}</span>`).join('') :
+                                article.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')
+                            }
+                        </div>
+                    </header>
+                    <div class="article-content">
+                        ${htmlContent}
+                    </div>
+                </article>
+            `;
             
             document.getElementById('preview-section').style.display = 'block';
             document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth' });
