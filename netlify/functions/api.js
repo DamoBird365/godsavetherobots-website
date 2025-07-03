@@ -96,6 +96,11 @@ Sitemap: ${req.protocol}://${req.get('host')}/sitemap.xml
     res.send(robotsTxt);
 });
 
+// Admin route (serves the admin.html file)
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

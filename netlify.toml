@@ -3,7 +3,7 @@
   publish = "public"
 
 [functions]
-  external_node_modules = ["express", "express-handlebars", "markdown-it", "mongoose", "marked", "highlight.js"]
+  external_node_modules = ["express", "express-handlebars", "markdown-it", "mongoose", "marked", "highlight.js", "@google/generative-ai"]
   node_bundler = "esbuild"
   included_files = ["views/**", "content/**", "public/**"]
 

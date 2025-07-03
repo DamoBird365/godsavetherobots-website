@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Generate Post | God Save the Robots</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .admin-form {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            background: #007cba;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #005a87;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .preview-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        .preview-meta {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .auth-form {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">God Save the Robots</a></h1>
+        <p>Admin Panel - Generate New Post</p>
+    </header>
+
+    <main class="admin-container">
+        <!-- Authentication Form -->
+        <div id="auth-section" class="auth-form">
+            <h2>Admin Authentication</h2>
+            <div class="form-group">
+                <label for="admin-token">Admin Token:</label>
+                <input type="password" id="admin-token" placeholder="Enter admin token">
+            </div>
+            <button class="btn" onclick="authenticate()">Login</button>
+        </div>
+
+        <!-- Main Admin Panel (hidden initially) -->
+        <div id="admin-panel" style="display: none;">
+            <h2>Generate New Blog Post</h2>
+            
+            <form class="admin-form" onsubmit="generatePost(event)">
+                <div class="form-group">
+                    <label for="content-input">Content Input:</label>
+                    <textarea id="content-input" placeholder="Paste article, link, or topic you want to write about..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prompt">Writing Prompt:</label>
+                    <textarea id="prompt" placeholder="Additional instructions for the AI (e.g., 'Write a humorous take on this', 'Focus on practical implications', etc.)">Write an engaging blog post about this topic that fits the God Save the Robots style - informative but accessible, with occasional humor and focus on human perspectives on technology.</textarea>
+                </div>
+                
+                <button type="submit" class="btn" id="generate-btn">Generate Post</button>
+            </form>
+
+            <!-- Preview Section -->
+            <div id="preview-section" style="display: none;">
+                <h3>Generated Post Preview</h3>
+                <div class="preview-container">
+                    <div class="preview-meta">
+                        <h4 id="preview-title"></h4>
+                        <p><strong>Description:</strong> <span id="preview-description"></span></p>
+                        <p><strong>Tags:</strong> <span id="preview-tags"></span></p>
+                        <p><strong>Author:</strong> <span id="preview-author"></span></p>
+                    </div>
+                    <div id="preview-content"></div>
+                    
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-success" onclick="savePost()">Approve & Save Post</button>
+                        <button class="btn" onclick="hidePreview()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div id="message-area"></div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        let authToken = '';
+        let generatedArticle = null;
+
+        function authenticate() {
+            authToken = document.getElementById('admin-token').value;
+            if (authToken) {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            }
+        }
+
+        function showMessage(message, type = 'error') {
+            const messageArea = document.getElementById('message-area');
+            messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        async function generatePost(event) {
+            event.preventDefault();
+            
+            const contentInput = document.getElementById('content-input').value;
+            const prompt = document.getElementById('prompt').value;
+            const generateBtn = document.getElementById('generate-btn');
+            
+            if (!contentInput.trim()) {
+                showMessage('Please provide content input');
+                return;
+            }
+
+            generateBtn.textContent = 'Generating...';
+            generateBtn.disabled = true;
+            document.body.classList.add('loading');
+
+            try {
+                const response = await fetch('/.netlify/functions/generate-post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        action: 'generate',
+                        contentInput,
+                        prompt
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to generate post');
+                }
+
+                generatedArticle = data.generatedContent;
+                showPreview(generatedArticle);
+                showMessage('Post generated successfully! Review it below.', 'success');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error generating post: ' + error.message);
+            } finally {
+                generateBtn.textContent = 'Generate Post';
+                generateBtn.disabled = false;
+                document.body.classList.remove('loading');
+            }
+        }
+
+        function showPreview(article) {
+            document.getElementById('preview-title').textContent = article.title;
+            document.getElementById('preview-description').textContent = article.description;
+            document.getElementById('preview-tags').textContent = article.tags;
+            document.getElementById('preview-author').textContent = article.author;
+            
+            // Convert markdown to HTML
+            const htmlContent = marked.parse(article.content);
+            document.getElementById('preview-content').innerHTML = htmlContent;
+            
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hidePreview() {
+            document.getElementById('preview-section').style.display = 'none';
+            generatedArticle = null;
+        }
+
+        async function savePost() {
+            if (!generatedArticle) {
+                showMessage('No article to save');
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/generate-post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        action: 'save',
+                        articleData: generatedArticle
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to save post');
+                }
+
+                showMessage('Post saved successfully! It will appear on the site shortly.', 'success');
+                hidePreview();
+                
+                // Clear form
+                document.getElementById('content-input').value = '';
+                document.getElementById('prompt').value = 'Write an engaging blog post about this topic that fits the God Save the Robots style - informative but accessible, with occasional humor and focus on human perspectives on technology.';
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error saving post: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
