@@ -1,0 +1,45 @@
+{
+  "site": {
+    "name": "God Save the Robots",
+    "tagline": "Our robots, who art in servers",
+    "description": "A digital sanctuary exploring AI, automation, agentic workflows, and the sacred future of technology",
+    "baseUrl": "https://godsavetherobots.com",
+    "author": "The Digital Prophet",
+    "email": "contact@godsavetherobots.com",
+    "social": {
+      "twitter": "@godsaverobots",
+      "linkedin": "company/god-save-the-robots",
+      "github": "godsavetherobots"
+    },
+    "keywords": ["AI", "Automation", "Agentic Workflows", "LLM", "Multimodal AI", "Future Technology"],
+    "language": "en",
+    "timezone": "UTC"
+  },
+  "schema": {
+    "version": "1.0",
+    "lastUpdated": "2025-07-03T00:00:00Z",
+    "contentTypes": ["article", "video", "external", "podcast"],
+    "structure": {
+      "article": {
+        "required": ["id", "title", "slug", "description", "content", "publishDate", "author", "status"],
+        "optional": ["tags", "featured", "videoUrl", "externalUrl", "readTime", "image"]
+      }
+    }
+  },
+  "seo": {
+    "defaultImage": "/assets/og-image.png",
+    "twitterCard": "summary_large_image",
+    "structuredData": {
+      "organization": {
+        "@type": "Organization",
+        "name": "God Save the Robots",
+        "url": "https://godsavetherobots.com",
+        "logo": "https://godsavetherobots.com/assets/logo.png",
+        "sameAs": [
+          "https://twitter.com/godsaverobots",
+          "https://linkedin.com/company/god-save-the-robots"
+        ]
+      }
+    }
+  }
+}

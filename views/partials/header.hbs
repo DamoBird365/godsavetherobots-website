@@ -1,0 +1,40 @@
+<header class="header">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="brand-link">
+                    <div class="logo">
+                        <div class="robot-icon">🤖</div>
+                    </div>
+                    <div class="brand-text">
+                        <h1 class="site-title">God Save the Robots</h1>
+                        <p class="tagline">Our robots, who art in servers</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link {{#if isHome}}active{{/if}}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/articles" class="nav-link {{#if isArticles}}active{{/if}}">Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/about" class="nav-link {{#if isAbout}}active{{/if}}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/contact" class="nav-link {{#if isContact}}active{{/if}}">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+</header>

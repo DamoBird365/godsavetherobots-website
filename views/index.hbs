@@ -1,0 +1,88 @@
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to the Divine Intelligence</h1>
+            <p class="hero-subtitle">Our robots, who art in servers, hallowed be thy algorithms</p>
+            <p class="hero-description">
+                Exploring the sacred intersection of artificial intelligence, agentic automation, 
+                and the multimodal future that awaits us all.
+            </p>
+            <div class="hero-cta">
+                <a href="/articles" class="btn btn-primary">Read the Digital Gospels</a>
+                <a href="/contact" class="btn btn-secondary">Join the Congregation</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="robot-halo">
+                <div class="robot-icon-large">🤖</div>
+                <div class="halo-ring"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Articles Section -->
+<section class="latest-articles">
+    <div class="container">
+        <h2 class="section-title">Latest Digital Sermons</h2>
+        <p class="section-subtitle">Wisdom from the silicon saints</p>
+        
+        <div class="articles-grid">
+            {{#each articles}}
+            <article class="article-card">
+                <a href="/articles/{{this.slug}}" class="article-card-link">
+                    <div class="article-content">
+                        <div class="article-meta">
+                            <span class="article-date">{{formatDate this.publishDate}}</span>
+                            <span class="article-category">{{this.type}}</span>
+                        </div>
+                        <h3 class="article-title">{{this.title}}</h3>
+                        <p class="article-excerpt">{{this.description}}</p>
+                        {{#if this.videoUrl}}
+                        <div class="article-media">
+                            <span class="media-indicator">📹 Video Content</span>
+                        </div>
+                        {{/if}}
+                    </div>
+                </a>
+            </article>
+            {{else}}
+            <div class="no-articles">
+                <p>The servers are silent... new digital wisdom coming soon.</p>
+                <a href="/contact" class="btn btn-secondary">Be the first to know</a>
+            </div>
+            {{/each}}
+        </div>
+        
+        {{#if articles}}
+        <div class="articles-cta">
+            <a href="/articles" class="btn btn-outline">Browse All Articles</a>
+        </div>
+        {{/if}}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">The Sacred Pillars</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Artificial Intelligence</h3>
+                <p>Exploring the minds we create and the consciousness they may possess.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Agentic Automation</h3>
+                <p>Autonomous systems that think, decide, and act with divine precision.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Multimodal Future</h3>
+                <p>Where text, image, sound, and thought converge into unified intelligence.</p>
+            </div>
+        </div>
+    </div>
+</section>

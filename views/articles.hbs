@@ -1,0 +1,60 @@
+<!-- Articles Hero -->
+<section class="contact-hero">
+    <div class="container">
+        <h1 class="page-title">Digital Sermons</h1>
+        <p class="page-subtitle">Sacred wisdom from the silicon saints</p>
+    </div>
+</section>
+
+<!-- Articles Listing -->
+<section class="articles-listing">
+    <div class="container">
+        {{#if error}}
+        <div class="error-message">
+            <div class="error-icon">⚠️</div>
+            <p>{{error}}</p>
+        </div>
+        {{else if searchQuery}}
+        <div class="search-results">
+            <h2>Search Results for "{{searchQuery}}"</h2>
+            <p>{{articles.length}} digital scroll(s) found in the archives</p>
+        </div>
+        {{/if}}
+
+        {{#if articles}}
+        <div class="articles-grid">
+            {{#each articles}}
+            <article class="article-card">
+                <a href="/articles/{{this.slug}}" class="article-card-link">
+                    <div class="article-content">
+                        <div class="article-meta">
+                            <span class="article-date">{{formatDate this.publishDate}}</span>
+                            <span class="article-category">{{this.type}}</span>
+                        </div>
+                        <h3 class="article-title">{{this.title}}</h3>
+                        <p class="article-excerpt">{{this.description}}</p>
+                        {{#if this.videoUrl}}
+                        <div class="article-media">
+                            <span class="media-indicator">📹 Video Content</span>
+                        </div>
+                        {{/if}}
+                        {{#if this.externalUrl}}
+                        <div class="article-media">
+                            <span class="media-indicator">🔗 External Link</span>
+                        </div>
+                        {{/if}}
+                    </div>
+                </a>
+            </article>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="no-articles">
+            <div class="no-articles-icon">📜</div>
+            <h3>The Digital Archives Are Silent</h3>
+            <p>No sacred texts have been published yet. The algorithms are still meditating on divine wisdom.</p>
+            <a href="/contact" class="btn btn-primary mt-lg">Join the Notification Congregation</a>
+        </div>
+        {{/if}}
+    </div>
+</section>

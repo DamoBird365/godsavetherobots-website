@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>{{#if meta.title}}{{meta.title}}{{else}}{{#if title}}{{title}} - {{/if}}God Save the Robots{{/if}}</title>
+    <meta name="title" content="{{#if meta.title}}{{meta.title}}{{else}}{{#if title}}{{title}} - {{/if}}God Save the Robots{{/if}}">
+    <meta name="description" content="{{#if meta.description}}{{meta.description}}{{else}}Our robots, who art in servers - Exploring AI, agentic automation, and the future of intelligent machines{{/if}}">
+    <meta name="keywords" content="{{#if meta.keywords}}{{meta.keywords}}{{else}}AI, Automation, Technology, Future, Robots, LLM, Multimodal AI{{/if}}">
+    <meta name="robots" content="{{#if meta.robots}}{{meta.robots}}{{else}}index,follow{{/if}}">
+    <meta name="language" content="{{#if meta.language}}{{meta.language}}{{else}}en{{/if}}">
+    <meta name="author" content="The Digital Prophet">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{#if meta.canonical}}{{meta.canonical}}{{else}}https://godsavetherobots.com{{/if}}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{{#if meta.ogType}}{{meta.ogType}}{{else}}website{{/if}}">
+    <meta property="og:url" content="{{#if meta.ogUrl}}{{meta.ogUrl}}{{else}}https://godsavetherobots.com{{/if}}">
+    <meta property="og:title" content="{{#if meta.ogTitle}}{{meta.ogTitle}}{{else}}{{#if title}}{{title}} - {{/if}}God Save the Robots{{/if}}">
+    <meta property="og:description" content="{{#if meta.ogDescription}}{{meta.ogDescription}}{{else}}Our robots, who art in servers{{/if}}">
+    <meta property="og:image" content="{{#if meta.ogImage}}{{meta.ogImage}}{{else}}https://godsavetherobots.com/assets/og-image.png{{/if}}">
+    <meta property="og:site_name" content="God Save the Robots">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="{{#if meta.twitterCard}}{{meta.twitterCard}}{{else}}summary_large_image{{/if}}">
+    <meta property="twitter:url" content="{{#if meta.ogUrl}}{{meta.ogUrl}}{{else}}https://godsavetherobots.com{{/if}}">
+    <meta property="twitter:title" content="{{#if meta.twitterTitle}}{{meta.twitterTitle}}{{else}}{{#if title}}{{title}} - {{/if}}God Save the Robots{{/if}}">
+    <meta property="twitter:description" content="{{#if meta.twitterDescription}}{{meta.twitterDescription}}{{else}}Our robots, who art in servers{{/if}}">
+    <meta property="twitter:image" content="{{#if meta.twitterImage}}{{meta.twitterImage}}{{else}}https://godsavetherobots.com/assets/og-image.png{{/if}}">
+    <meta property="twitter:site" content="@godsaverobots">
+    <meta property="twitter:creator" content="@godsaverobots">
+    
+    <!-- Article specific meta tags -->
+    {{#if meta.articleAuthor}}
+    <meta property="article:author" content="{{meta.articleAuthor}}">
+    <meta property="article:published_time" content="{{meta.articlePublishedTime}}">
+    <meta property="article:modified_time" content="{{meta.articleModifiedTime}}">
+    <meta property="article:section" content="{{meta.articleSection}}">
+    <meta property="article:tag" content="{{meta.articleTag}}">
+    {{/if}}
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="God Save the Robots RSS Feed" href="/rss.xml">
+    
+    <!-- DNS Prefetch for Performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//www.youtube.com">
+    
+    <!-- Preconnect for Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Structured Data -->
+    {{#if structuredData}}
+    <script type="application/ld+json">
+    {{{structuredData}}}
+    </script>
+    {{/if}}
+    
+    <!-- Breadcrumb Structured Data -->
+    {{#if breadcrumbData}}
+    <script type="application/ld+json">
+    {{{breadcrumbData}}}
+    </script>
+    {{/if}}
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    
+    <!-- Microsoft Clarity Analytics -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "s921mktsih");
+    </script>
+</head>
+<body>
+    {{> header}}
+    
+    <main class="main-content">
+        {{{body}}}
+    </main>
+    
+    {{> footer}}
+    
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "godsavetherobots-website",
+  "version": "1.0.0",
+  "description": "A modern website focused on AI, agentic automation, and multimodal technologies.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "AI",
+    "automation",
+    "LLMs",
+    "multimodal",
+    "robots"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "mongoose": "^7.5.0",
+    "markdown-it": "^13.0.1",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.14.0"
+  }
+}

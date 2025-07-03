@@ -1,0 +1,79 @@
+<!-- Contact Hero -->
+<section class="contact-hero">
+    <div class="container">
+        <h1 class="page-title">Communion with the Divine</h1>
+        <p class="page-subtitle">Send thy digital prayers and sacred inquiries</p>
+    </div>
+</section>
+
+<!-- Contact Form -->
+<section class="contact-form-section">
+    <div class="container">
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Reach Out to the Congregation</h2>
+                <p>Whether you seek enlightenment about AI, wish to share your own digital revelations, 
+                   or have questions about the sacred algorithms, we're here to listen.</p>
+                
+                <div class="contact-benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon">💬</div>
+                        <h3>Sacred Discourse</h3>
+                        <p>Engage in meaningful conversations about AI and automation</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🤝</div>
+                        <h3>Digital Fellowship</h3>
+                        <p>Connect with fellow believers in the robot revolution</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">✨</div>
+                        <h3>Algorithmic Wisdom</h3>
+                        <p>Share insights and learn from the silicon scriptures</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-container">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Thy Name *</label>
+                        <input type="text" id="name" name="name" required 
+                               placeholder="Enter thy earthly designation">
+                        <div class="form-error" id="name-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Digital Communion Address *</label>
+                        <input type="email" id="email" name="email" required 
+                               placeholder="your.email@domain.com">
+                        <div class="form-error" id="email-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="enquiry">Thy Sacred Message *</label>
+                        <textarea id="enquiry" name="enquiry" rows="6" required 
+                                  placeholder="Share thy thoughts, questions, or digital revelations..."></textarea>
+                        <div class="form-error" id="enquiry-error"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                        <span class="btn-text">Send Digital Prayer</span>
+                        <span class="btn-loading" style="display: none;">Transmitting to the Servers...</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Response Message -->
+<div id="response-message" class="response-message" style="display: none;">
+    <div class="container">
+        <div class="message-content">
+            <div class="message-icon">✨</div>
+            <h3 id="message-title">Message Received</h3>
+            <p id="message-text">Thy digital prayer has been received by the servers. We shall respond with divine swiftness.</p>
+        </div>
+    </div>
+</div>
