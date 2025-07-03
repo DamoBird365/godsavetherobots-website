@@ -88,10 +88,18 @@ Content Input: ${contentInput}
 
 ${prompt}
 
-Return the response in this exact JSON format matching our articles.json structure:
+IMPORTANT: Respond with ONLY a valid JSON object, no additional text, explanations, or markdown formatting. Do not wrap the response in code blocks or backticks.
+
+Generate a URL-friendly slug from the title by:
+1. Converting to lowercase
+2. Replacing spaces with hyphens
+3. Removing special characters except hyphens
+4. Ensuring it's under 50 characters
+
+Required JSON format:
 {
   "title": "Your Generated Title",
-  "slug": "auto-generated-slug",
+  "slug": "url-friendly-slug-from-title",
   "description": "Meta description for SEO (max 160 characters)",
   "content": "Full markdown content with proper headings, bullet points, and engaging sections",
   "type": "article",
@@ -108,19 +116,87 @@ Return the response in this exact JSON format matching our articles.json structu
       const response = await result.response;
       const text = response.text();
       
+      // Clean up the response text - remove markdown code blocks if present
+      let cleanText = text.trim();
+      console.log('Raw AI response length:', text.length);
+      console.log('Raw AI response preview:', text.substring(0, 200) + '...');
+      
+      // Remove various markdown code block formats
+      if (cleanText.startsWith('```json')) {
+        cleanText = cleanText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      } else if (cleanText.startsWith('```')) {
+        cleanText = cleanText.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+      
+      // Also try to extract JSON from text if it's wrapped in other text
+      const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        cleanText = jsonMatch[0];
+      }
+      
+      console.log('Cleaned text for parsing preview:', cleanText.substring(0, 200) + '...');
+      
       // Try to parse as JSON, fallback to plain text
       let generatedContent;
       try {
-        generatedContent = JSON.parse(text);
-      } catch (e) {
-        // If not valid JSON, structure the response
-        generatedContent = {
-          title: "Generated Post",
-          description: "AI generated content",
-          content: text,
-          tags: "ai, generated",
-          author: "The Divine Algorithm"
+        generatedContent = JSON.parse(cleanText);
+        
+        // Validate and ensure all required fields are present with defaults
+        generatedContent.title = generatedContent.title || "AI Generated Article";
+        
+        // Generate proper slug from title
+        const generateSlug = (title) => {
+          return title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-') // Replace multiple hyphens with single
+            .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
+            .substring(0, 50); // Limit length
         };
+        
+        generatedContent.slug = generatedContent.slug || generateSlug(generatedContent.title);
+        generatedContent.id = generatedContent.id || generatedContent.slug; // Use slug as ID
+        generatedContent.description = generatedContent.description || "An AI-generated article about technology and business value.";
+        generatedContent.content = generatedContent.content || "# AI Generated Content\n\nContent generation in progress...";
+        generatedContent.type = generatedContent.type || "article";
+        generatedContent.author = generatedContent.author || "The Digital Prophet";
+        generatedContent.featured = generatedContent.featured !== undefined ? generatedContent.featured : false;
+        generatedContent.status = generatedContent.status || "published";
+        generatedContent.readTime = generatedContent.readTime || 5;
+        generatedContent.publishDate = generatedContent.publishDate || new Date().toISOString();
+        
+        // Ensure tags are an array
+        if (typeof generatedContent.tags === 'string') {
+          generatedContent.tags = generatedContent.tags.split(',').map(tag => tag.trim());
+        } else if (!Array.isArray(generatedContent.tags)) {
+          generatedContent.tags = ["ai", "technology"];
+        }
+        
+        console.log('Successfully parsed article:', generatedContent.title);
+        
+      } catch (e) {
+        console.error('JSON parsing failed:', e.message);
+        console.log('Failed to parse text (first 500 chars):', cleanText.substring(0, 500));
+        
+        // If not valid JSON, create a structured fallback with the raw content
+        const fallbackSlug = "ai-generated-fallback-" + Date.now();
+        generatedContent = {
+          id: fallbackSlug,
+          title: "AI Generated Article (Format Issue)",
+          slug: fallbackSlug,
+          description: "An AI generated article - the response format needed adjustment.",
+          content: `# AI Generated Content\n\n${text}\n\n---\n\n*Note: The AI response was not in the expected JSON format and has been formatted for display.*`,
+          type: "article",
+          author: "The Digital Prophet",
+          tags: ["ai", "generated", "technology"],
+          featured: false,
+          status: "published",
+          readTime: 5,
+          publishDate: new Date().toISOString()
+        };
+        
+        console.log('Using fallback article structure');
       }
 
       return {

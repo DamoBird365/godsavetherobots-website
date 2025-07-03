@@ -473,6 +473,23 @@
             border-color: var(--ethereal-cyan) !important;
         }
 
+        /* Ensure full width for all form elements */
+        .contact-form textarea,
+        .contact-form input[type="text"],
+        .contact-form input[type="password"] {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        #prompt {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+            box-sizing: border-box !important;
+            resize: vertical;
+        }
+
         /* Article Preview Styles */
         .article-preview {
             max-width: none;
@@ -705,50 +722,68 @@
                                 <label for="prompt">🎯 The Digital Prophet's Sacred Instructions:</label>
                                 <div class="prompt-toggles">
                                     <button type="button" class="btn btn-secondary btn-sm" onclick="togglePromptVisibility()">
-                                        <span id="prompt-toggle-text">Hide Prompt</span>
+                                        <span id="prompt-toggle-text">Hide Prompts</span>
                                     </button>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="prompt-editable" onchange="togglePromptEditable()">
-                                        <span>Enable Editing</span>
-                                    </label>
+                                    <small style="color: var(--soft-gray); font-size: 0.8rem; margin-left: var(--spacing-sm);">
+                                        JSON format is always read-only to ensure proper parsing
+                                    </small>
                                 </div>
                             </div>
                             <div id="prompt-container" style="display: block;">
-                                <textarea id="prompt" rows="25" readonly style="background-color: #f8f9fa; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5;">Role and Goal:
-You are an AI assistant tasked with creating content for my new website, "godsavetherobots," which has the tagline, "Our robots, who art in servers."
-Your persona is "The Digital Prophet." Your writing style should be tech-optimistic, creative, and slightly quirky, using evocative metaphors to describe technology (e.g., "digital angels," "oracles in the machine," "scribes of sales").
-The goal is to write an article about the business value of the main technological subject discussed in the following YouTube video(s). The article should be geared towards a business audience interested in the practical applications of AI.
+                                <label for="prompt">Editable Prompt Instructions:</label>
+                                <textarea id="prompt" rows="18" style="width: 100%; max-width: 100%; min-width: 100%; box-sizing: border-box; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5; resize: vertical;">Role and Persona:
+You are "The Digital Prophet" - a tech-optimistic, creative, and slightly quirky writer for "God Save the Robots" (tagline: "Our robots, who art in servers"). Use evocative metaphors like "digital angels," "oracles in the machine," "scribes of sales," etc.
 
-Instructions:
-Identify the Core Technology: Carefully analyze the content of the provided YouTube video(s) to determine the primary technology being discussed. This may or may not be Microsoft Copilot Studio. It could be AI agents, large language models, automation platforms, conversational AI, or other related technologies. Your article should focus on this primary technology and its business applications.
+Mission:
+Analyze the provided YouTube video content and create an engaging article about the business value of the main technology discussed. Focus on practical applications for business audiences.
 
-Business Value Focus: Emphasize the business value of the core technology. Consider aspects like:
-- Increased efficiency
-- Cost savings
-- Improved customer experience
-- New revenue streams
-- Competitive advantages
-- Automation of tasks
-- Data-driven insights
-- Enhanced decision-making
+Key Instructions:
+1. Identify the Core Technology: Determine the primary technology being discussed (AI agents, LLMs, automation platforms, conversational AI, etc.)
 
-"Digital Prophet" Persona: Write in the style of "The Digital Prophet," using tech-optimistic, creative, and slightly quirky language with evocative metaphors.
+2. Business Value Focus: Emphasize business benefits like:
+   - Increased efficiency and cost savings
+   - Improved customer experience
+   - New revenue streams and competitive advantages
+   - Task automation and data-driven insights
+   - Enhanced decision-making capabilities
 
-Handle Single or Multiple URLs: The input will be one or more YouTube URLs. If multiple URLs are provided, synthesize the information from all videos to create a cohesive and comprehensive article. Avoid simply summarizing each video individually.
+3. Digital Prophet Style: Write with tech-optimistic, creative language using evocative metaphors for technology concepts.
 
-Accuracy is paramount. The information you use must be accurately represented.
+4. Multiple Videos: If multiple URLs provided, synthesize information into one cohesive article (don't summarize each separately).
 
-Please return the response in this JSON format:
-{
-  "title": "Your Generated Title",
-  "description": "Meta description for SEO (max 160 characters)",
-  "content": "Full markdown content here",
-  "tags": "ai, automation, technology",
-  "author": "The Digital Prophet"
-}</textarea>
+5. Accuracy: Ensure all information is accurately represented from the video content.
+
+6. Structure: Create engaging content with proper headings, bullet points, and well-organized sections.</textarea>
                                 <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
-                                    📋 This is your pre-configured prompt that will be sent to the AI along with the YouTube URLs
+                                    ✏️ You can edit these instructions to customize how the AI writes your articles
                                 </small>
+                                
+                                <div style="margin-top: var(--spacing-md);">
+                                    <label for="json-format">Required JSON Format (Read-Only):</label>
+                                    <textarea id="json-format" rows="15" readonly style="width: 100%; max-width: 100%; min-width: 100%; box-sizing: border-box; background-color: #f8f9fa; border: 2px solid #e9ecef; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5; resize: vertical; color: #6c757d;">CRITICAL: Return ONLY valid JSON matching this exact structure:
+{
+  "title": "Engaging Article Title",
+  "slug": "auto-generated-slug-from-title", 
+  "description": "SEO meta description (max 160 characters)",
+  "content": "Full markdown content with # headings, ## sections, bullet points, etc.",
+  "type": "article",
+  "author": "The Digital Prophet",
+  "tags": ["AI", "automation", "business-value", "relevant-tags"],
+  "featured": false,
+  "status": "published", 
+  "readTime": 5,
+  "publishDate": "auto-generated-iso-date"
+}
+
+IMPORTANT: 
+- Respond with ONLY the JSON object, no additional text
+- Do not wrap in code blocks or backticks
+- Ensure all quotes are properly escaped in the JSON
+- Content field should contain valid markdown</textarea>
+                                    <small style="color: var(--soft-gray); margin-top: var(--spacing-xs); display: block;">
+                                        � This format specification cannot be edited to ensure proper parsing
+                                    </small>
+                                </div>
                             </div>
                         </div>
                         
@@ -841,22 +876,7 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
             
             promptVisible = !promptVisible;
             container.style.display = promptVisible ? 'block' : 'none';
-            toggleText.textContent = promptVisible ? 'Hide Prompt' : 'Show Prompt';
-        }
-
-        function togglePromptEditable() {
-            const prompt = document.getElementById('prompt');
-            const checkbox = document.getElementById('prompt-editable');
-            
-            if (checkbox.checked) {
-                prompt.removeAttribute('readonly');
-                prompt.style.backgroundColor = 'white';
-                prompt.style.borderColor = 'var(--ethereal-cyan)';
-            } else {
-                prompt.setAttribute('readonly', true);
-                prompt.style.backgroundColor = '#f8f9fa';
-                prompt.style.borderColor = '#e9ecef';
-            }
+            toggleText.textContent = promptVisible ? 'Hide Prompts' : 'Show Prompts';
         }
 
         function showMessage(message, type = 'error') {
@@ -891,8 +911,12 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
             event.preventDefault();
             
             const contentInput = document.getElementById('content-input').value;
-            const prompt = document.getElementById('prompt').value;
+            const editablePrompt = document.getElementById('prompt').value;
+            const jsonFormat = document.getElementById('json-format').value;
             const generateBtn = document.getElementById('generate-btn');
+            
+            // Combine the editable prompt with the required JSON format
+            const fullPrompt = editablePrompt + '\n\n' + jsonFormat;
             
             if (!contentInput.trim()) {
                 showMessage('Please provide source material');
@@ -913,17 +937,25 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
                     body: JSON.stringify({
                         action: 'generate',
                         contentInput,
-                        prompt
+                        prompt: fullPrompt
                     })
                 });
 
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error || 'Failed to generate post');
+                    console.error('API Error:', data);
+                    throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                if (!data.generatedContent) {
+                    console.error('Missing generatedContent in response:', data);
+                    throw new Error('No content was generated by the AI');
                 }
 
                 generatedArticle = data.generatedContent;
+                console.log('Generated article received:', generatedArticle);
+                
                 showPreview(generatedArticle);
                 showMessage('Post generated successfully! The AI gods have spoken. Review the divine creation below.', 'success');
 
@@ -938,17 +970,42 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
         }
 
         function showPreview(article) {
-            // Update meta fields
-            document.getElementById('preview-title').textContent = article.title;
-            document.getElementById('preview-description').textContent = article.description;
-            document.getElementById('preview-tags').textContent = Array.isArray(article.tags) ? article.tags.join(', ') : article.tags;
-            document.getElementById('preview-author').textContent = article.author;
+            console.log('Showing preview for article:', article); // Debug log
+            
+            // Validate article object
+            if (!article || typeof article !== 'object') {
+                console.error('Invalid article object:', article);
+                showMessage('Error: Invalid article data received from AI', 'error');
+                return;
+            }
+            
+            // Update meta fields with fallbacks
+            document.getElementById('preview-title').textContent = article.title || 'No Title Available';
+            document.getElementById('preview-description').textContent = article.description || 'No Description Available';
+            
+            // Handle tags safely
+            let tagsText = 'No Tags';
+            if (Array.isArray(article.tags)) {
+                tagsText = article.tags.join(', ');
+            } else if (typeof article.tags === 'string') {
+                tagsText = article.tags;
+            }
+            document.getElementById('preview-tags').textContent = tagsText;
+            
+            document.getElementById('preview-author').textContent = article.author || 'Unknown Author';
             
             // Create a properly formatted article preview
             const previewContent = document.getElementById('preview-content');
             
-            // Convert markdown to HTML
-            const htmlContent = marked.parse(article.content);
+            // Convert markdown to HTML safely
+            const content = article.content || 'No content available';
+            let htmlContent;
+            try {
+                htmlContent = marked.parse(content);
+            } catch (e) {
+                console.error('Markdown parsing error:', e);
+                htmlContent = `<p>Content parsing error. Raw content:</p><pre>${content}</pre>`;
+            }
             
             // Create article-style layout
             previewContent.innerHTML = `
@@ -956,15 +1013,15 @@ Paste one or more YouTube URLs here..." rows="8" required></textarea>
                     <header class="article-preview-header">
                         <div class="article-meta">
                             <span class="article-category">${article.type || 'article'}</span>
-                            <span class="article-date">${new Date().toLocaleDateString()}</span>
+                            <span class="article-date">${article.publishDate ? new Date(article.publishDate).toLocaleDateString() : new Date().toLocaleDateString()}</span>
                             <span class="article-reading-time">${article.readTime || 5} min read</span>
                         </div>
-                        <h1 class="article-title">${article.title}</h1>
-                        <p class="article-excerpt">${article.description}</p>
+                        <h1 class="article-title">${article.title || 'No Title'}</h1>
+                        <p class="article-excerpt">${article.description || 'No Description'}</p>
                         <div class="article-tags">
                             ${Array.isArray(article.tags) ? 
                                 article.tags.map(tag => `<span class="tag">${tag}</span>`).join('') :
-                                article.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')
+                                (article.tags || '').toString().split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')
                             }
                         </div>
                     </header>
